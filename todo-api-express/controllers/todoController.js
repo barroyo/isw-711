@@ -31,7 +31,36 @@ const getMethod = (req, res) => {
   });
 };
 
+const patchMethod = (req, res) => {
+  // get task by id
+  const task = Task.findById(req.query.id, function (err, task) {
+    if (err) {
+      res.json({ error: err })
+    }
+    return task;
+  });
+
+
+  // update the task object
+  task.title = req.body.title ? req.body.title : oldTask.title;
+  task.detail = req.body.detail ? req.body.defail : oldTask.detail;
+
+
+  task.save(function (err) {
+    if (err) {
+      res.status(422);
+      console.log('error while saving the task', err)
+      res.json({
+        error: 'There was an error saving the task'
+      });
+    }
+    res.status(200);
+    res.json(task);
+  });
+};
+
 module.exports = {
   postMethod,
-  getMethod
+  getMethod,
+  patchMethod
 }
