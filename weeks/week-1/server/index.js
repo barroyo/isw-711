@@ -1,5 +1,12 @@
 const express = require('express');
 const app = express();
+const cors = require("cors");
+
+// check for cors
+app.use(cors({
+  domains: '*',
+  methods: "*"
+}));
 
 
 // listen to GET requests on /hello

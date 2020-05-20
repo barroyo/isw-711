@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 1 - Consume API</title>
+  <script>
+    function completed() {
+      console.log(this.responseText);
+      document.getElementById('result').innerHTML = this.responseText;
+    }
+
+    function error() {
+      console.log(this.responseText);
+    }
+
+    function getHelloWorld() {
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener("load", completed);
+      oReq.addEventListener("error", error);
+      oReq.open("GET", "http://localhost:3000/hello");
+      oReq.send();
+    }
+  </script>
+</head>
+
+<body>
+  <button onclick="getHelloWorld();">Hello</button>
+  <h3>Results:</h3>
+  <div id="result"></div>
+</body>
+
+</html>
