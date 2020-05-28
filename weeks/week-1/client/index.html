@@ -6,21 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Week 1 - Consume API</title>
   <script>
-    function completed() {
+    const completed = () => {
       console.log(this.responseText);
       document.getElementById('result').innerHTML = this.responseText;
-    }
+    };
 
-    function error() {
-      console.log(this.responseText);
-    }
+    const error = () => console.log(this.responseText);
 
     function getHelloWorld() {
-      var oReq = new XMLHttpRequest();
-      oReq.addEventListener("load", completed);
-      oReq.addEventListener("error", error);
-      oReq.open("GET", "http://localhost:3000/hello");
-      oReq.send();
+      const ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.addEventListener("load", completed);
+      ajaxRequest.addEventListener("error", error);
+      ajaxRequest.open("GET", "http://localhost:3000/hello");
+      ajaxRequest.send();
     }
   </script>
 </head>
