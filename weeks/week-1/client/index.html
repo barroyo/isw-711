@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Week 1 - Consume API</title>
   <script>
-    const completed = () => {
-      console.log(this.responseText);
-      document.getElementById('result').innerHTML = this.responseText;
+    const completed = (e) => {
+      document.getElementById('result').innerHTML = e.target.responseText;
     };
 
     const error = () => console.log(this.responseText);
