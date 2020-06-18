@@ -4,10 +4,15 @@ const app = express();
 const mongoose = require("mongoose");
 const db = mongoose.connect("mongodb://127.0.0.1:27017/todo-api");
 
+const {
+  taskPatch,
+  taskPost,
+  taskGet,
+} = require("./controllers/taskController.js");
+
 // parser for the request body (required for the POST and PUT methods)
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
 
 // check for cors
 const cors = require("cors");
@@ -16,14 +21,12 @@ app.use(cors({
   methods: "*"
 }));
 
-// Task Model
-const Task = require("../models/taskModel");
 
-
-// listen to GET requests on /hello
-app.get('/hello', function (req, res) {
-  res.send('World');
-});
+// listen to the task request
+app.get("/api/tasks", taskGet);
+app.post("/api/tasks", taskPost);
+app.patch("/api/tasks", taskPatch);
+app.put("/api/tasks", taskPatch);
 
 
 app.listen(3000, () => console.log(`Example app listening on port 3000!`))

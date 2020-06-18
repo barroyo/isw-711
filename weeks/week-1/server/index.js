@@ -11,7 +11,7 @@ app.use(cors({
 
 // listen to GET requests on /hello
 app.get('/hello', function (req, res) {
-  res.send('World');
+  res.send('Hello World');
 });
 
 
