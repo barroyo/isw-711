@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 4 - Consume GraphQL</title>
+  <script>
+    const completed = (e) => {
+      const response = JSON.parse(e.target.response);
+      console.log('response:', response);
+      document.getElementById('result').innerHTML = response.data.hello;
+    };
+
+    const error = (e) => console.log(e.target.response);
+
+    function getHelloWorld() {
+      const ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.addEventListener("load", completed);
+      ajaxRequest.addEventListener("error", error);
+      ajaxRequest.open("POST", "http://localhost:4000/graphql");
+      ajaxRequest.setRequestHeader('Content-type', 'application/json');
+      ajaxRequest.send(JSON.stringify({
+        query: `{
+          hello
+        }`
+      }));
+    }
+  </script>
+</head>
+
+<body>
+  <button onclick="getHelloWorld();">Hello</button>
+  <h3>Results:</h3>
+  <div id="result"></div>
+</body>
+
+</html>

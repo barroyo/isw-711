@@ -4,14 +4,18 @@ exports.graphQLschema = buildSchema(`
     orders: [Order]
     clients: [Client]
     getOrder(orderId: Int!): Order
+    getClients: [Client]
     hello: String
   }
 
   type Mutation {
-    addClient(name: String!, lastName: String! ): Client
+    addClient(name: String!, lastName: String!, email: String ): Client
+    addOrder(clientId: String!, productId: String!): Order
+    addProduct(name: String!): Product
   }
 
   type Order {
+    id: ID!
     client: Client!
     products: [Product!]
   }

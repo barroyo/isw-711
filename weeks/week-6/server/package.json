@@ -1,0 +1,23 @@
+{
+  "name": "ordersgraphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"no hay pruebas que ejecutar\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "barroyo",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.6.0",
+    "mongoose": "^5.4.10",
+    "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}

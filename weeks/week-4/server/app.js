@@ -52,6 +52,7 @@ const root = {
   getOrder: (req) => getOrder(req),
   addClient: (req) => addClient(req),
   orders: () => Object.values(orders),
+  clients: () => Object.values(clients)
 };
 
 // instance the expressJS app
