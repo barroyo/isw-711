@@ -4,7 +4,6 @@ exports.graphQLschema = buildSchema(`
     orders: [Order]
     clients: [Client]
     getOrder(orderId: Int!): Order
-    getClients: [Client]
     hello: String
   }
 

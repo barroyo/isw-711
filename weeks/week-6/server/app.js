@@ -28,6 +28,15 @@ const getClients = () => {
   })
 };
 
+const getOrders = () => {
+  return Order.find(function (err, orders) {
+    if (err) {
+      return "There was an error"
+    }
+    return orders;
+  })
+};
+
 const addClient = (req) => {
   const client = new Client.model();
   client.name = req.name;
@@ -64,8 +73,9 @@ const addOrder = async (req) => {
 // graphQL service
 const root = {
   getOrder: (req, res) => getOrder(req),
+  orders: (req, res) => getOrders(req),
   getClient: async (id) => getClient(req),
-  getClients: () => {
+  clients: () => {
     return getClients();
   },
   addClient: (req) => addClient(req),
