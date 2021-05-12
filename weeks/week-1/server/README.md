@@ -1,6 +1,5 @@
 # Week 1 - My First Hello World with API
 
-
 ## Install
 
 - Install nvm

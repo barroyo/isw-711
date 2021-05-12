@@ -7,7 +7,8 @@
   <title>Week 1 - Consume API</title>
   <script>
     const completed = (e) => {
-      document.getElementById('result').innerHTML = e.target.responseText;
+      const data = JSON.parse(e.target.responseText);
+      document.getElementById('result').innerHTML = `Tipo de Cambio Dolares ${data.TipoCompraDolares}`;
     };
 
     const error = () => console.log(this.responseText);
@@ -16,7 +17,7 @@
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", "http://localhost:3000/hello");
+      ajaxRequest.open("GET", "http://localhost:3000/tipocambio");
       ajaxRequest.send();
     }
   </script>
