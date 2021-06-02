@@ -55,5 +55,42 @@ app.post('/tasks', function (req, res) {
   }
 });
 
+app.patch('/tasks', (req, res) => {
+
+  // check if there's an ID in the querystring
+  if (req.query && req.query.id) {
+    Task.findById(req.query.id, function (err, task) {
+      if (err) {
+        res.status(404);
+        console.log('error while queryting the task', err);
+        res.json({ error: "Task doesnt exist" });
+      }
+
+      // update the task object (patch)
+      task.title = req.body.title ? req.body.title : task.title;
+      task.detail = req.body.detail ? req.body.detail : task.detail;
+      // update the task object (put)
+      // task.title = req.body.title
+      // task.detail = req.body.detail
+
+      task.save(function (err) {
+        if (err) {
+          res.status(422);
+          console.log('error while saving the task', err);
+          res.json({
+            error: 'There was an error saving the task'
+          });
+        }
+        res.status(200); // OK
+        res.json(task);
+      });
+    });
+  } else {
+    res.status(404);
+    res.json({ error: "Task doesnt exist" });
+  }
+
+});
+
 
 app.listen(3000, () => console.log(`Example app listening on port 3000!`))

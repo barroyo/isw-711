@@ -107,8 +107,43 @@ const taskPatch = (req, res) => {
   }
 };
 
+/**
+ * Deletes a task
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+ const taskDelete = (req, res) => {
+  // get task by id
+  if (req.query && req.query.id) {
+    Task.findById(req.query.id, function (err, task) {
+      if (err) {
+        res.status(404);
+        console.log('error while queryting the task', err)
+        res.json({ error: "Task doesnt exist" })
+      }
+
+      task.deleteOne(function (err) {
+        if (err) {
+          res.status(422);
+          console.log('error while deleting the task', err)
+          res.json({
+            error: 'There was an error deleting the task'
+          });
+        }
+        res.status(204); //No content
+        res.json({});
+      });
+    });
+  } else {
+    res.status(404);
+    res.json({ error: "Task doesnt exist" })
+  }
+};
+
 module.exports = {
   taskGet,
   taskPost,
-  taskPatch
+  taskPatch,
+  taskDelete
 }
