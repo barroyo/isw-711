@@ -9,7 +9,7 @@
     const completed = (e) => {
       const response = JSON.parse(e.target.response);
       console.log('response:', response);
-      document.getElementById('result').innerHTML = response.data.hello;
+      // document.getElementById('result').innerHTML = response.data.hello;
     };
 
     const error = (e) => console.log(e.target.response);
@@ -21,9 +21,17 @@
       ajaxRequest.open("POST", "http://localhost:4000/graphql");
       ajaxRequest.setRequestHeader('Content-type', 'application/json');
       ajaxRequest.send(JSON.stringify({
-        query: `{
-          hello
-        }`
+        query: `query GetClientsAndOrders{
+                  clients {
+                    name
+                  }
+                  orders {
+                    products {
+                      id
+                      name
+                    }
+                  }
+                }`
       }));
     }
   </script>

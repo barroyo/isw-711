@@ -80,7 +80,8 @@ const root = {
   },
   addClient: (req) => addClient(req),
   addProduct: (req) => addProduct(req),
-  addOrder: (req) => addOrder(req),
+  addOrder: function(req)  { addOrder(req); },
+  hello: function() { return "Hola Mundo"}
 };
 
 // instance the expressJS app
