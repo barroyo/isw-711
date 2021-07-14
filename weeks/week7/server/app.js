@@ -32,8 +32,6 @@ app.use(bodyParser.json());
 //basic authentication
 app.use(function (req, res, next) {
   if (req.headers["authorization"]) {
-    // Basic VVROOlBhc3N3b3JkMQ==
-
     const authBase64 = req.headers['authorization'].split(' ');
     console.log('authBase64:', authBase64);
     const userPass = base64decode(authBase64[1]);
