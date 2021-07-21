@@ -67,6 +67,8 @@ app.use(function (req, res, next) {
 
         // here I can validate if the token was created from a different user agent or from a different IP
         console.log('Payload:', decodedToken);
+        // valido permisos
+        console.log(req.url, req.method);
         next();
       });
     } catch (e) {

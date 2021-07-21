@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 10 - List of tasks from API</title>
+  <script>
+    const completed = (e) => {
+      const response = JSON.parse(e.target.response);
+      console.log(response);
+    };
+
+    const error = (e) => console.log(e.target.response);
+
+    function getTasks() {
+      const token = sessionStorage.getItem('token');
+
+      if(token) {
+        const ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.addEventListener("load", completed);
+        ajaxRequest.addEventListener("error", error);
+        ajaxRequest.open("GET", "http://localhost:3000/api/tasks");
+        ajaxRequest.setRequestHeader('Content-type', 'application/json');
+        ajaxRequest.setRequestHeader('Authorization', `Bearer ${token}`);
+        ajaxRequest.send();
+      } else {
+        location.href = '/index.html';
+      }
+    }
+  </script>
+</head>
+
+<body onload="getTasks()">
+  <h2>Tasks</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row"></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td scope="row"></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>

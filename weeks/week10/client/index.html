@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 10 - Login with JWT API</title>
+  <script>
+    const completed = (e) => {
+      const response = JSON.parse(e.target.response);
+      if(response.token) {
+        sessionStorage.setItem('token', response.token);
+        location.href = '/tasks.html';
+      }
+    };
+
+    const error = (e) => console.log(e.target.response);
+
+    function userLogin() {
+      debugger;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.addEventListener("load", completed);
+      ajaxRequest.addEventListener("error", error);
+      ajaxRequest.open("POST", "http://localhost:3000/api/session");
+      ajaxRequest.setRequestHeader('Content-type', 'application/json');
+      ajaxRequest.send(JSON.stringify({
+        username,
+        password
+      }));
+
+    }
+  </script>
+</head>
+
+<body>
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="">Username</label>
+      <input type="text" name="username" id="username" class="form-control" placeholder="" aria-describedby="helpId">
+      <label for="">Pasword</label>
+      <input type="password" name="password" id="password" class="form-control" placeholder="" aria-describedby="helpId">
+    </div>
+    <button type="button" id="login" onclick="userLogin();" class="btn btn-primary">Login</button>
+  </form>
+</body>
+
+</html>
