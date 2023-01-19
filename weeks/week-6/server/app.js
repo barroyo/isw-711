@@ -88,13 +88,15 @@ const root = {
 const app = express();
 // check for cors
 const cors = require("cors");
-app.use(cors({
-  domains: '*',
-  methods: "*"
-}));
+
+const corsOptions = {
+  origin: "*",
+  methods: "PUT,GET"
+};
+app.use(cors(corsOptions));
 
 //one single endpoint different than REST
-app.use('/graphql', graphqlHTTP({
+app.post('/graphql', cors(corsOptions), graphqlHTTP({
   schema: graphQLschema,
   rootValue: root,
   graphiql: true,

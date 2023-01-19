@@ -5,7 +5,17 @@ const { graphQLschema } = require('./graphql-schema.js')
 
 // test data (for testing purposes)
 // this might be replaced by real database structures
-let clients = [];
+let clients = [{
+    id: uuid(),
+    name: "John",
+    lastName: "Doe"
+  },
+  {
+    id: uuid(),
+    name: "Jane",
+    lastName: "Doe"
+  }];
+
 let orders = [{
   client: {
     id: uuid(),
@@ -49,8 +59,12 @@ const addClient = (client) => {
 // graphQL service
 const root = {
   hello: () => 'Hello world from GraphQL!',
-  getOrder: (req) => getOrder(req),
-  addClient: (req) => addClient(req),
+  getOrder: function (req){
+    getOrder(req);
+  },
+  addClient: function(req){
+    addClient(req);
+  },
   orders: () => Object.values(orders),
   clients: () => Object.values(clients)
 };
