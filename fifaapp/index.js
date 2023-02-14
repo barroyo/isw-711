@@ -2,25 +2,60 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const db = mongoose.connect("mongodb://127.0.0.1:27017/fifapp");
-const TeamModel = require("./models/team");
+const Team = require("./models/team");
+const Player = require("./models/player");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-// app.get('/tipocambio',  (req, res) => {
-//   // generate a response
-//   res.json({
-//     "TipoCompraDolares" : "608",
-//     "TipoVentaDolares" : "621",
-//     "TipoCompraEuros" : "731.85",
-//     "TipoVentaEuros" : "761.9"
-//   });
-// });
+app.post('/player', function (req, res) {
+  const player = new Player.model();
+  player.first_name = req.body.first_name;
+  player.last_name = req.body.last_name;
+  player.age = req.body.age;
+
+  //find the team
+  console.log('team:', req.body.team);
+  Team.model.findById(req.body.team, (error,teamFound) => {
+    console.log('error:',error);
+    console.log('team:', teamFound);
+    if(error) {
+
+    }
+    if (teamFound) {
+      player.team = teamFound;
+    }
+  });
+
+
+  if (player.first_name && player.last_name) {
+    player.save(function (err) {
+      if (err) {
+        res.status(422);
+        console.log('error while saving the player', err);
+        res.json({
+          error: 'There was an error saving the player'
+        });
+      }
+      res.status(201);//CREATED
+      res.header({
+        'location': `http://localhost:3000/player/?id=${player.id}`
+      });
+      res.json(player);
+    });
+  } else {
+    res.status(422);
+    console.log('error while saving the player')
+    res.json({
+      error: 'No valid data provided for player'
+    });
+  }
+});
 
 
 app.post('/team', function (req, res) {
 
-  const team = new TeamModel();
+  const team = new Team.model();
 
 
   team.name = req.body.name;

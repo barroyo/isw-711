@@ -8,9 +8,9 @@
 
 ## Run
 
-- To execute the service run `node index.js`
+- To execute the service run `npm start`
 
 
 ## Test
 
-- To test this you can use [postman](https://www.postman.com/) or a simple curl request: `curl http://localhost:3000/hello`
+- To test this you can use [postman](https://www.postman.com/) or a simple curl request: `curl http://localhost:3000/tipocambio`
