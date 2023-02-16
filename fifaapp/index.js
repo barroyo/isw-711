@@ -8,46 +8,40 @@ const Player = require("./models/player");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-app.post('/player', function (req, res) {
+app.post('/player', async function (req, res) {
   const player = new Player.model();
   player.first_name = req.body.first_name;
   player.last_name = req.body.last_name;
   player.age = req.body.age;
 
   //find the team
-  console.log('team:', req.body.team);
-  Team.model.findById(req.body.team, (error,teamFound) => {
-    console.log('error:',error);
-    console.log('team:', teamFound);
-    if(error) {
-
-    }
+  try {
+    const teamFound = await Team.model.findById(req.body.team);
     if (teamFound) {
       player.team = teamFound;
     }
-  });
 
-
-  if (player.first_name && player.last_name) {
-    player.save(function (err) {
-      if (err) {
-        res.status(422);
-        console.log('error while saving the player', err);
-        res.json({
-          error: 'There was an error saving the player'
-        });
-      }
+    // create the player anyway
+    if (player.first_name && player.last_name) {
+      await player.save();
       res.status(201);//CREATED
       res.header({
         'location': `http://localhost:3000/player/?id=${player.id}`
       });
       res.json(player);
-    });
-  } else {
+    } else {
+      res.status(422);
+      console.log('error while saving the player')
+      res.json({
+        error: 'No valid data provided for player'
+      });
+    }
+
+  } catch (error) {
     res.status(422);
-    console.log('error while saving the player')
+    console.log('error while saving the player', error)
     res.json({
-      error: 'No valid data provided for player'
+      error: 'There was an error creating the player'
     });
   }
 });
