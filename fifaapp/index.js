@@ -1,12 +1,40 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const db = mongoose.connect("mongodb://127.0.0.1:27017/fifapp");
+const db = mongoose.connect("mongodb://127.0.0.1:27017/fifapp", { useNewUrlParser: true, useUnifiedTopology: true });
+const {
+  base64decode
+} = require('nodejs-base64');
+
 const Team = require("./models/team");
 const Player = require("./models/player");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+  if (req.headers["authorization"]) {
+    console.log(req.headers["authorization"]);
+    const authBase64 = req.headers['authorization'].split(' ');
+    console.log('authBase64:', authBase64);
+    const userPass = base64decode(authBase64[1]);
+    console.log('userPass:', userPass);
+    const user = userPass.split(':')[0];
+    const password = userPass.split(':')[1];
+
+    if (user === 'admin' && password == '1234') {
+      // saveSession('admin');
+      next();
+      return;
+    }
+  }
+  res.status(401);
+  res.send({
+    error: "Unauthorized"
+  });
+});
+
+
 
 app.post('/player', async function (req, res) {
   const player = new Player.model();
