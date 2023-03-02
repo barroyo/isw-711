@@ -5,12 +5,11 @@ const Team = require('./team');
 const playerSchema = new Schema({
   first_name: { type: String },
   last_name: { type: String },
-  age: { type: Number },
+  age: { type: Number, required: false },
   team: {
     type: Team.schema,
     required: false
   }
-
 });
 const playerModel = mongoose.model('players', playerSchema);
 
