@@ -1,0 +1,19 @@
+{
+  "name": "fifaapp-graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.5.0",
+    "graphql": "^16.6.0",
+    "mongoose": "^7.0.2",
+    "nodemon": "^2.0.21"
+  }
+}
