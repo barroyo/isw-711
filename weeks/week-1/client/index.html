@@ -37,7 +37,6 @@
       const countries = JSON.parse(e.target.responseText);
       let optionsHtml = "";
       countries.forEach(country => {
-        console.log("currencies:", Object.keys(country.currencies));
         optionsHtml += `<option value="${country.cca3}">${country.name.common}</option>`;
       });
       document.getElementById("countries").innerHTML = optionsHtml;
