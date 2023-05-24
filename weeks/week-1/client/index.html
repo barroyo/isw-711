@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,20 +12,40 @@
 
     const error = () => console.log(this.responseText);
 
-    function getHelloWorld() {
-      const ajaxRequest = new XMLHttpRequest();
+    function getExchange() {
+      const ajaxRequest = new XMLHttpRequest(); //AJAX
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", "http://localhost:3000/tipocambio");
+      ajaxRequest.open("GET", "http://localhost:3001/tipocambio");
       ajaxRequest.send();
     }
   </script>
 </head>
 
 <body>
-  <button onclick="getHelloWorld();">Hello</button>
+  <button onclick="getExchange();">Tipo de Cambio</button>
   <h3>Results:</h3>
   <div id="result"></div>
+
+  <select name="countries" id="countries">
+  </select>
+
+  <script>
+    const ajaxRequest = new XMLHttpRequest(); //AJAX
+    ajaxRequest.addEventListener("load", (e) => {
+
+      const countries = JSON.parse(e.target.responseText);
+      let optionsHtml = "";
+      countries.forEach(country => {
+        console.log("currencies:", Object.keys(country.currencies));
+        optionsHtml += `<option value="${country.cca3}">${country.name.common}</option>`;
+      });
+      document.getElementById("countries").innerHTML = optionsHtml;
+    });
+    ajaxRequest.addEventListener("error", ()=>{});
+    ajaxRequest.open("GET", "https://restcountries.com/v3.1/all");
+    ajaxRequest.send();
+  </script>
 </body>
 
 </html>
