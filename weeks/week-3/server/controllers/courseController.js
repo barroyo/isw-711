@@ -34,7 +34,7 @@ const coursePost = async (req, res) => {
 const courseGet = (req, res) => {
   // if an specific teacher is required
   if (req.query && req.query.id) {
-    Course.findById(req.query.id)
+    Course.findById(req.query.id).populate('teacher')
       .then( (course) => {
         res.json(course);
       })
@@ -45,7 +45,7 @@ const courseGet = (req, res) => {
       });
   } else {
     // get all teachers
-    Course.find()
+    Course.find().populate('teacher')
       .then( courses => {
         res.json(courses);
       })
