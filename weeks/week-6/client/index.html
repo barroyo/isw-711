@@ -4,43 +4,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Week 4 - Consume GraphQL</title>
+  <title>Week 3 - Consume API with Auth</title>
   <script>
-    const completed = (e) => {
-      const response = JSON.parse(e.target.response);
-      console.log('response:', response);
-      // document.getElementById('result').innerHTML = response.data.hello;
-    };
 
-    const error = (e) => console.log(e.target.response);
+    const error = (e) => console.log(e.target.responseText);
 
-    function getHelloWorld() {
+    function teacherCreated() {
+      alert('Teacher created');
+    }
+
+    function saveTeacher() {
+      const ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.addEventListener("load", teacherCreated);
+      ajaxRequest.addEventListener("error", error);
+      ajaxRequest.open("POST", "http://localhost:3001/api/teachers");
+      ajaxRequest.setRequestHeader("Content-Type", "application/json");
+      ajaxRequest.setRequestHeader("Authorization", "Bearer 21232f297a57a5a743894a0e4a801fc3");
+
+      const data = {
+        'first_name': document.getElementById('first_name').value,
+        'last_name' : document.getElementById('last_name').value,
+        'cedula': document.getElementById('cedula').value,
+        'age': document.getElementById('age').value,
+      };
+      ajaxRequest.send(JSON.stringify(data));
+    }
+
+
+
+    function login() {
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:4000/graphql");
-      ajaxRequest.setRequestHeader('Content-type', 'application/json');
-      ajaxRequest.send(JSON.stringify({
-        query: `query GetClientsAndOrders{
-                  clients {
-                    name
-                  }
-                  orders {
-                    products {
-                      id
-                      name
-                    }
-                  }
-                }`
-      }));
+      ajaxRequest.open("POST", "http://localhost:3000/login");
+      ajaxRequest.setRequestHeader("Content-Type", "application/json");
+
+      const data = {
+        'username': document.getElementById('title').value,
+        'password': document.getElementById('description').value
+      };
+      ajaxRequest.send(JSON.stringify(data));
     }
   </script>
 </head>
 
 <body>
-  <button onclick="getHelloWorld();">Hello</button>
-  <h3>Results:</h3>
-  <div id="result"></div>
+  <div class="container">
+    <form>
+      <div class="form-group row">
+        <label for="inputName" class="col-sm-1-12 col-form-label">First Name</label>
+        <div class="col-sm-1-12">
+          <input type="text" class="form-control" name="first_name" id="first_name" placeholder="">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputName" class="col-sm-1-12 col-form-label">Last Name</label>
+        <div class="col-sm-1-12">
+          <input type="text" class="form-control" name="last_name" id="last_name" placeholder="">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputName" class="col-sm-1-12 col-form-label">Cedula</label>
+        <div class="col-sm-1-12">
+          <input type="text" class="form-control" name="cedula" id="cedula" placeholder="">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputName" class="col-sm-1-12 col-form-label">Age</label>
+        <div class="col-sm-1-12">
+          <input type="number" class="form-control" name="age" id="age"ope>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+          <button type="button" class="btn btn-primary" id="saveButton" onclick="saveTeacher()">Save</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="tableList"></div>
+  </div>
 </body>
 
 </html>
