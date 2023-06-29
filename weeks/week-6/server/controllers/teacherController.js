@@ -14,9 +14,11 @@ const teacherPost = async (req, res) => {
   teacher.cedula = req.body.cedula;
   teacher.age = req.body.age;
 
+  // validates if the request includes at least the name nad last name
   if (teacher.first_name && teacher.last_name) {
     await teacher.save()
       .then(data => {
+        // teacher was created
         res.status(201); // CREATED
         res.header({
           'location': `/api/teachers/?id=${data.id}`
