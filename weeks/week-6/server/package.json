@@ -1,7 +1,7 @@
 {
-  "name": "week-5",
+  "name": "week-6",
   "version": "1.0.0",
-  "description": "Semana 5 del curso de ISW-711",
+  "description": "Semana 6 del curso de ISW-711",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

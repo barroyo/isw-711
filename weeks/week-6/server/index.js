@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 const app = express();
@@ -26,6 +26,8 @@ const { saveSession, getSession } = require('./controllers/sessionController.js'
 const {
   coursePost, courseGet
 } = require("./controllers/courseController.js");
+
+const {createImage}  = require("./controllers/openAiController.js");
 
 // parser for the request body (required for the POST and PUT methods)
 const bodyParser = require("body-parser");
@@ -143,7 +145,7 @@ app.post("/api/teachers", teacherPost);
 app.patch("/api/teachers", teacherPatch);
 app.put("/api/teachers", teacherPatch);
 app.delete("/api/teachers", teacherDelete);
-
+app.post("/api/image", createImage);
 // course
 app.get("/api/courses", courseGet);
 app.post("/api/courses", coursePost);
