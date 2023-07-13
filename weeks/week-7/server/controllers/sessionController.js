@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const Session = require("../models/sessionsModel");
+const Session = require("../models/sessionModel");
 
 const saveSession = async function (username) {
   const token = crypto.createHash('md5').update(username).digest("hex");
