@@ -4,7 +4,8 @@
   "description": "Semana 6 del curso de ISW-711",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon start"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,7 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^5.13.17",
     "nodejs-base64": "^2.0.0",
+    "nodemon": "^3.0.1",
     "openai": "^3.3.0"
   }
 }

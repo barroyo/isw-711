@@ -1,4 +1,6 @@
-const Course = require("../models/courseModel");
+const courseModel = require("../models/courseModel");
+
+
 
 /**
  * Get all courses or one
@@ -6,15 +8,30 @@ const Course = require("../models/courseModel");
  * @param {*} req
  * @param {*} res
  */
-const courseGet = async (req) => {
-  // if an specific teacher is required
-  await Course.find()
-    .then( (course) => {
-      return course;
-    })
-    .catch(err => {
-      return { error: "Course doesnt exist" }
-    });
+// const courseGet = (req) => {
+//   return Course.find()
+//     .then( (course) => {
+//       console.log('here', course);
+//       return course;
+//     })
+//     .catch(err => {
+//       return { error: "Course doesnt exist" }
+//     });
+// };
+
+/**
+ * Get all courses or one
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+const courseGet = (req, res) => {
+  return courseModel.find((error, courses) => {
+    if(error) {
+      console.log('there was an error', error);
+    }
+    return courses;
+  }).populate('teacher').exec();
 };
 
 module.exports = {

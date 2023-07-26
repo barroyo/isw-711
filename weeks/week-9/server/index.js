@@ -22,12 +22,15 @@ const {
 // parser for the request body (required for the POST and PUT methods)
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const courseModel = require('./models/courseModel.js');
+const teacherModel = require('./models/teacherModel.js');
 
 // expose in the root element the different entry points of the
 // graphQL service
-const root = {
-  courses: (req, res) => courseGet(req),
-  hello: function() { return "Hola Mundo"}
+const graphqlResolvers = {
+  courses: courseGet,
+  hello: function() { return "Hola Mundo"},
+  version: function() {return "1.0"}
 };
 
 // Middlewares
@@ -69,7 +72,7 @@ app.use(cors({
 
 app.use('/graphql', graphqlHTTP({
   schema: graphQLschema,
-  rootValue: root,
+  rootValue: graphqlResolvers,
   graphiql: true,
 }));
 

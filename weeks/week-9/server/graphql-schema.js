@@ -3,6 +3,7 @@ exports.graphQLschema = buildSchema(`
   type Query {
     courses: [Course]
     hello: String
+    version: String
   }
 
   type Course {
