@@ -23,9 +23,28 @@ const courseModel = require("../models/courseModel");
  * @param {*} req
  * @param {*} res
  */
-const courseGet = (req, res) => {
+const courseGetAll = (req, res) => {
   return courseModel.find((error, courses) => {
-    if(error) {
+    if (error) {
+      console.log('there was an error', error);
+      return error;
+    }
+    return courses;
+  }).populate('teacher').exec();
+};
+
+/**
+ * Get all courses or one
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+const courseSearch = (req, res) => {
+  return courseModel.find(
+    {
+      "name": { $regex: `${req.name}`, $options: 'i' }
+    }, (error, courses) => {
+    if (error) {
       console.log('there was an error', error);
       return error;
     }
@@ -34,5 +53,6 @@ const courseGet = (req, res) => {
 };
 
 module.exports = {
-  courseGet
+  courseGetAll,
+  courseSearch
 }
