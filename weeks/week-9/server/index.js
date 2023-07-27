@@ -28,7 +28,7 @@ const teacherModel = require('./models/teacherModel.js');
 // expose in the root element the different entry points of the
 // graphQL service
 const graphqlResolvers = {
-  courses: courseGet,
+  getAllCourses: courseGet,
   hello: function() { return "Hola Mundo"},
   version: function() {return "1.0"}
 };
