@@ -1,0 +1,12 @@
+{
+  "name": "myfirstapirest",
+  "version": "1.0.0",
+  "description": "This is the first API REST for the ISW-711",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Bladimir Arroyo",
+  "license": "ISC"
+}

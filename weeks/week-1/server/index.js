@@ -13,7 +13,7 @@ app.use(cors({
 //routes
 app.get('/tipocambio', function (req, res) {
   res.json({
-    "TipoCompraDolares" : "620",
+    "TipoCompraDolares" : "621",
     "TipoVentaDolares" : "621",
     "TipoCompraEuros" : "731.85",
     "TipoVentaEuros" : "761.9"
