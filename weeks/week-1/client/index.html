@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Week 1 - Consume API</title>
   <script>
-    const completed = (resonse) => {
+    const completed = (response) => {
       const data = JSON.parse(response.target.responseText);
       document.getElementById('result').innerHTML = `Tipo de Cambio Dolares ${data.TipoCompraDolares}`;
     };
