@@ -12,18 +12,18 @@
 
     const error = (e) => console.log(e.target.responseText);
 
-    function getHelloWorld() {
+    function getTeachers() {
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("GET", "http://localhost:3000/hello");
+      ajaxRequest.open("GET", "http://localhost:3001/api/teachers");
       ajaxRequest.send();
     }
   </script>
 </head>
 
 <body>
-  <button onclick="getHelloWorld();">Hello</button>
+  <button onclick="getTeacher();">Get Teacher</button>
   <h3>Results:</h3>
   <div id="result"></div>
 </body>

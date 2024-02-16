@@ -85,8 +85,8 @@ const teacherPatch = (req, res) => {
       }
 
       // update the teacher object (patch)
-      teacher.title = req.body.title ? req.body.title : teacher.title;
-      teacher.detail = req.body.detail ? req.body.detail : teacher.detail;
+      teacher.first_name = req.body.first_name ? req.body.first_name : teacher.first_name;
+      teacher.last_name = req.body.last_name ? req.body.last_name : teacher.last_name;
       // update the teacher object (put)
       // teacher.title = req.body.title
       // teacher.detail = req.body.detail
