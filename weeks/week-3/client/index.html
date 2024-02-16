@@ -9,48 +9,25 @@
 
     const error = (e) => console.log(e.target.responseText);
 
-    function saveTask() {
+    function saveTeacher() {
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:3000/tasks");
+      ajaxRequest.open("POST", "http://localhost:3000/api/teachers");
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
 
       const data = {
-        'title': document.getElementById('title').value,
-        'description': document.getElementById('description').value
+        'first_name': document.getElementById('first_name').value,
+        'last_name': document.getElementById('last_name').value
       };
       ajaxRequest.send(JSON.stringify(data));
     }
 
     /**
-     * Generates an HTML table with tasks
-     */
-    function renderTasks(tasks) {
-      let html = "<table>";
-      tasks.forEach(task => {
-        html += `<tr><td>${task.title}</td><td><button onclick="get('${task._id}')"> Edit </button> </td></tr>`;
-      });
-      html += '</table>';
-
-      document.getElementById('tableList').innerHTML = html;
-    }
-
-    /**
-     * Generates an HTML table with tasks
-     */
-    function renderTask(task) {
-      let html = "<table>";
-      html += `<tr><td>${task.title}</td><td><button onclick="get('${task._id}')"> Edit </button> </td></tr>`;
-      html += '</table>';
-
-      document.getElementById('tableList').innerHTML = html;
-    }
-    /**
      *  Get on or all
      */
     function get(id) {
-      let url = "http://localhost:3000/api/tasks";
+      let url = "http://localhost:3000/api/teachers";
       if(id) {
         url = `${url}?id=${id}`;
       }
@@ -69,18 +46,43 @@
       ajaxRequest.send();
     }
 
-    function saveTask() {
+
+    function login() {
       const ajaxRequest = new XMLHttpRequest();
       ajaxRequest.addEventListener("load", completed);
       ajaxRequest.addEventListener("error", error);
-      ajaxRequest.open("POST", "http://localhost:3000/tasks");
+      ajaxRequest.open("POST", "http://localhost:3000/login");
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
 
       const data = {
-        'title': document.getElementById('title').value,
-        'description': document.getElementById('description').value
+        'username': document.getElementById('title').value,
+        'password': document.getElementById('description').value
       };
       ajaxRequest.send(JSON.stringify(data));
+    }
+
+    /**
+     * Generates an HTML table with teacher
+     */
+     function renderTeachers(teachers) {
+      let html = "<table>";
+      teachers.forEach(teacher => {
+        html += `<tr><td>${teacher.first_name}</td><td><button onclick="get('${teacher._id}')"> Edit </button> </td></tr>`;
+      });
+      html += '</table>';
+
+      document.getElementById('tableList').innerHTML = html;
+    }
+
+    /**
+     * Generates an HTML table with teacher
+     */
+    function renderTeacher(teacher) {
+      let html = "<table>";
+      html += `<tr><td>${teacher.first_name}</td><td><button onclick="get('${teacher._id}')"> Edit </button> </td></tr>`;
+      html += '</table>';
+
+      document.getElementById('tableList').innerHTML = html;
     }
 
     get();
@@ -91,20 +93,20 @@
   <div class="container">
     <form>
       <div class="form-group row">
-        <label for="inputName" class="col-sm-1-12 col-form-label">Title</label>
+        <label for="inputName" class="col-sm-1-12 col-form-label">First Name</label>
         <div class="col-sm-1-12">
-          <input type="text" class="form-control" name="title" id="title" placeholder="">
+          <input type="text" class="form-control" name="first_name" id="first_name" placeholder="">
         </div>
       </div>
       <div class="form-group row">
-        <label for="inputName" class="col-sm-1-12 col-form-label">Description</label>
+        <label for="inputName" class="col-sm-1-12 col-form-label">Last Name</label>
         <div class="col-sm-1-12">
-          <input type="text" class="form-control" name="description" id="description" placeholder="">
+          <input type="text" class="form-control" name="last_name" id="last_name" placeholder="">
         </div>
       </div>
       <div class="form-group row">
         <div class="offset-sm-2 col-sm-10">
-          <button type="button" class="btn btn-primary" id="saveButton" onclick="saveTask()">Save</button>
+          <button type="button" class="btn btn-primary" id="saveButton" onclick="saveTeacher()">Save</button>
         </div>
       </div>
     </form>
