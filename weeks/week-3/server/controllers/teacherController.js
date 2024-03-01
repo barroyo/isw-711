@@ -27,6 +27,7 @@ const teacherPost = async (req, res) => {
         res.status(422);
         console.log('error while saving the teacher', err);
         res.json({
+          error_code: 1233,
           error: 'There was an error saving the teacher'
         });
       });

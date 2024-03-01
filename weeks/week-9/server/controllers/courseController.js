@@ -39,10 +39,10 @@ const courseGetAll = (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const courseSearch = (req, res) => {
+const courseSearch = (params) => {
   return courseModel.find(
     {
-      "name": { $regex: `${req.name}`, $options: 'i' }
+      "name": { $regex: `${params.name}`, $options: 'i' }
     }, (error, courses) => {
     if (error) {
       console.log('there was an error', error);

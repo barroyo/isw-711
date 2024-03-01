@@ -20,4 +20,6 @@ exports.graphQLschema = buildSchema(`
     last_name: String!,
     cedula: String!,
     age: Int
-  }`);
+  }
+
+  `);

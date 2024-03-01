@@ -8,9 +8,9 @@ const db = mongoose.connect("mongodb://127.0.0.1:27017/teachers", {
   useUnifiedTopology: true
 });
 
-// const {
-//   base64decode
-// } = require('nodejs-base64');
+const {
+  base64decode
+} = require('nodejs-base64');
 
 const crypto = require('crypto');
 
@@ -36,6 +36,26 @@ app.use(cors({
   methods: "*"
 }));
 
+
+// // Auth basic http
+// app.use(function (req, res, next) {
+//   if (req.headers["authorization"]) {
+//     const authBase64 = req.headers['authorization'].split(' ');
+//     const userPass = base64decode(authBase64[1]);
+//     const user = userPass.split(':')[0];
+//     const password = userPass.split(':')[1];
+
+//     if (user === 'admin' && password == '1234') {
+//       // saveSession('admin');
+//       next();
+//       return;
+//     }
+//   }
+//   res.status(401);
+//   res.send({
+//     error: "Unauthorized"
+//   });
+// });
 
 // login token based
 app.post("/api/session", function (req, res, next) {
@@ -69,29 +89,6 @@ app.post("/api/session", function (req, res, next) {
   }
 
 });
-
-
-// // Auth basic http
-// app.use(function (req, res, next) {
-//   if (req.headers["authorization"]) {
-//     const authBase64 = req.headers['authorization'].split(' ');
-//     console.log('authBase64:', authBase64);
-//     const userPass = base64decode(authBase64[1]);
-//     console.log('userPass:', userPass);
-//     const user = userPass.split(':')[0];
-//     const password = userPass.split(':')[1];
-
-//     if (user === 'admin' && password == '1234') {
-//       // saveSession('admin');
-//       next();
-//       return;
-//     }
-//   }
-//   res.status(401);
-//   res.send({
-//     error: "Unauthorized"
-//   });
-// });
 
 // Token based Auth
 app.use(function (req, res, next) {
@@ -132,8 +129,6 @@ app.use(function (req, res, next) {
     });
   }
 });
-
-
 
 // listen to the task request
 app.get("/api/teachers", teacherGet);

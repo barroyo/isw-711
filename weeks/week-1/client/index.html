@@ -7,7 +7,7 @@
   <script>
     const completed = (response) => {
       const data = JSON.parse(response.target.responseText);
-      document.getElementById('result').innerHTML = `Tipo de Cambio Dolares ${data.TipoCompraDolares}`;
+      document.getElementById('result').innerHTML = `Tipo de Cambio Dolares Compra: ${data.TipoCompraDolares}`;
     };
 
     const error = () => console.log(this.responseText);

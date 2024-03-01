@@ -76,6 +76,8 @@
       ajaxRequest.open("POST", "http://localhost:3000/tasks");
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
 
+      ajaxRequest.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('authtoken')}`);
+
       const data = {
         'title': document.getElementById('title').value,
         'description': document.getElementById('description').value
@@ -85,10 +87,14 @@
 
     function login() {
       const ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.addEventListener("load", completed);
+      ajaxRequest.addEventListener("load", (response) => {
+        const session = response.responseText;
+        sessionStorage.setItem('authtoken',session.token);
+      });
       ajaxRequest.addEventListener("error", error);
       ajaxRequest.open("POST", "http://localhost:3000/login");
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
+
 
       const data = {
         'username': document.getElementById('title').value,

@@ -29,7 +29,7 @@ const teacherModel = require('./models/teacherModel.js');
 // graphQL service
 const graphqlResolvers = {
   getAllCourses: courseGetAll,
-  searchCourses: (req) => courseSearch(req),
+  searchCourses: (params) => courseSearch(params),
   hello: function() { return "Hola Mundo"},
   version: function() {return "1.0"}
 };

@@ -1,8 +1,13 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const db = mongoose.connect("mongodb://127.0.0.1:27017/fifapp", { useNewUrlParser: true, useUnifiedTopology: true });
+const { ApolloServer, gql } = require('apollo-server-express');
+const typeDefs = require('./graphql_schema');
+const resolvers = require('./resolvers');
+const server = new ApolloServer({ typeDefs, resolvers });
+
 const {saveSession, getSession } = require('./controllers/sessionController');
 const {
   base64decode
@@ -13,9 +18,14 @@ const Team = require("./models/team");
 const Player = require("./models/player");
 
 const bodyParser = require("body-parser");
+
+
 // Middlewares
 app.use(cors());
 app.use(bodyParser.json());
+
+await server.applyMiddleware({ app });
+
 
 // HTTP Basic Auth
 // app.use(function (req, res, next) {
@@ -106,6 +116,12 @@ app.use(function (req, res, next) {
   }
 });
 
+
+// Create a express instance serving all methods on `/graphql`
+// where the GraphQL over HTTP express request handler is
+
+app.all('/graphql', createHandler({ schema }));
+
 // REST Routes
 app.post('/player', async function (req, res) {
   const player = new Player.model();
@@ -151,7 +167,7 @@ app.get('/player', async function (req, res) {
   try {
     const players = await Player.model.find();
     if (players) {
-      res.json({data: players})
+      res.json({players: players})
     } else {
       res.status(204).json({});
     }
@@ -232,5 +248,8 @@ app.post('/team', function (req, res) {
 
 // });
 
-app.listen(4000, () => console.log(`Fifa app listening on port 3000!`))
+
+
+
+app.listen(4000, () => console.log(`Fifa app listening on port 4000!`))
 
