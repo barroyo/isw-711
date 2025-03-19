@@ -1,25 +1,20 @@
 {
-  "name": "week-6",
+  "dependencies": {
+    "express": "^4.21.2",
+    "graphql": "^16.10.0",
+    "graphql-http": "^1.22.4",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
+    "ruru": "^2.0.0-beta.19"
+  },
+  "name": "graphqlexample",
+  "description": "",
   "version": "1.0.0",
-  "description": "Semana 6 del curso de ISW-711",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start"
+    "start": "nodemon app.js"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "dotenv": "^16.3.1",
-    "express": "^4.17.1",
-    "express-graphql": "^0.9.0",
-    "graphql": "^14.6.0",
-    "jsonwebtoken": "^9.0.1",
-    "mongoose": "^5.13.17",
-    "nodejs-base64": "^2.0.0",
-    "nodemon": "^3.0.1",
-    "openai": "^3.3.0"
-  }
+  "license": "ISC"
 }

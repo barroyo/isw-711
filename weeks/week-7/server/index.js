@@ -87,7 +87,7 @@ app.post("/api/session", function (req, res) {
     const token = jwt.sign({
       userId: 123,
       name: 'Bladimir',
-      permission: ['create', 'edit', 'delete'],
+      permission: ['create', 'edit', 'delete', 'report'],
       deviceId: "123"
     }, theSecretKey);
 
@@ -114,7 +114,7 @@ app.use(function (req, res, next) {
             error: "Unauthorized"
           });
         }
-        console.log('Welcome', decodedToken.name);
+        console.log('Welcome', JSON.stringify(decodedToken));
         next();
       });
     } catch (e) {
