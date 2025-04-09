@@ -1,33 +1,36 @@
 const { buildSchema } = require('graphql');
-exports.graphQLschema = buildSchema(`
+exports.schema = buildSchema(`
   type Query {
-    getAllCourses: [Course]
-    searchCourses(name: String!): [Course]
-    hello: String
-    version: String
+    getCourses: [Course]
+    getCourse(id: String!): Course
+    searchCourses(name: String!, sort: String): [Course]
+    generateImage(prompt: String!): [String]
   }
 
   type Mutation {
-    createCourse(input: CreateCourseInput!): Course
+    createCourse(name: String!, credits: Int!, teacher: TeacherInput): Course
   }
 
   type Course {
     _id: ID!
-    name: String,
-    credits: Int,
+    name: String
+    credits: Int
     teacher: Teacher
   }
 
   type Teacher {
-    _id: ID!,
-    first_name: String!,
-    last_name: String!,
-    cedula: String!,
+    _id: ID!
+    first_name: String!
+    last_name: String!
+    cedula: String!
     age: Int
   }
 
-  input CreateCourseInput {
-    name: String!
-    credits: Int!
+  input TeacherInput {
+    first_name: String!
+    last_name: String!
+    cedula: String!
+    age: Int
   }
-`);
+
+  `);

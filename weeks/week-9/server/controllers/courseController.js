@@ -3,68 +3,30 @@ const Course = require("../models/courseModel");
 /**
  * Get all courses or one
  *
- * @param {*} req
- * @param {*} res
+ * @param {*} args
  */
-// const courseGet = (req) => {
-//   return Course.find()
-//     .then( (course) => {
-//       console.log('here', course);
-//       return course;
-//     })
-//     .catch(err => {
-//       return { error: "Course doesnt exist" }
-//     });
-// };
-
-/**
- * Get all courses or one
- *
- * @param {*} req
- * @param {*} res
- */
-const courseGetAll = (req, res) => {
-  return Course.find((error, courses) => {
-    if (error) {
-      console.log('there was an error', error);
-      return error;
-    }
-    return courses;
-  }).populate('teacher').exec();
+const courseGet = (args) => {
+  const { id } = args || {};
+  if (id) {
+    return Course.findById(id);
+  } else {
+    return Course.find();
+  }
 };
 
 /**
- * Get all courses or one
+ * Create a course
  *
- * @param {*} req
- * @param {*} res
+ * @param {*} args
+ * @returns
  */
-const courseSearch = (params) => {
-  return Course.find(
-    {
-      "name": { $regex: `${params.name}`, $options: 'i' }
-    }, (error, courses) => {
-    if (error) {
-      console.log('there was an error', error);
-      return error;
-    }
-    return courses;
-  }).populate('teacher').exec();
-};
-
-
-const addCourse = (req) => {
-  console.log('req:', req);
-  const course = new Course();
-  course.name = req.name;
-  course.credit = req.credit;
-
-  course.save();
-  return course;
+const courseCreate = (args) => {
+  const { name, description, price } = args;
+  const course = new Course({ name, description, price });
+  return course.save();
 }
 
 module.exports = {
-  courseGetAll,
-  courseSearch,
-  addCourse
+  courseGet,
+  courseCreate
 }

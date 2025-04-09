@@ -1,115 +1,49 @@
-/**
- * Call the GraphQL API to obtain all courses with teacher information
- *
- */
-function getAllCourses() {
-  fetch('http://localhost:3001/graphql', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
+const error = (e) => console.log(e.target.responseText);
 
-    body: JSON.stringify({
-      query: `{
-        getAllCourses {
-          name
-          credits
-        }
-        searchCourses(name:"Web") {
-          teacher {
-            _id
-          }
-        }
-
-      }`
-    })
-  })
-    .then(res => res.json())
-    .then(res => buildDataTable(res.data.getAllCourses))
+function teacherCreated() {
+  alert('Teacher created');
 }
 
-
 /**
- * Build an HTML table with the data of courses
- *
- * @param {*} data
+ * Function that calls the API function to store a new teacher
  */
-function buildDataTable(data) {
-  const tableBody = document.querySelector('#courseTable tbody');
+function saveTeacher() {
+  const ajaxRequest = new XMLHttpRequest();
+  token = sessionStorage.getItem('token');
+  ajaxRequest.addEventListener("load", teacherCreated);
+  ajaxRequest.addEventListener("error", error);
+  ajaxRequest.open("POST", "http://localhost:3001/api/teachers");
+  ajaxRequest.setRequestHeader("Content-Type", "application/json");
+  ajaxRequest.setRequestHeader("Authorization", `Bearer ${token}`);
 
-  data.forEach(course => {
-    const row = document.createElement('tr');
-
-    const nameCell = document.createElement('td');
-    nameCell.textContent = course.name || 'N/A';
-    row.appendChild(nameCell);
-
-    const creditsCell = document.createElement('td');
-    creditsCell.textContent = course.credits || '';
-    row.appendChild(creditsCell);
-
-    const firstNameCell = document.createElement('td');
-    firstNameCell.textContent = course.teacher.first_name || '';
-    row.appendChild(firstNameCell);
-
-    const lastNameCell = document.createElement('td');
-    lastNameCell.textContent = course.teacher.last_name || '';
-    row.appendChild(lastNameCell);
-
-
-    tableBody.appendChild(row);
-  });
-
-}
-
-
-async function createCourse(event) {
-  event.preventDefault();
-
-  const name = document.getElementById('name').value;
-  const credits = document.getElementById('credits').value;
-
-  const mutation = `
-        mutation CreateCourse($input: CreateCourseInput!) {
-            createCourse(input: $input) {
-                _id
-                name
-                credits
-            }
-        }
-    `;
-
-  const variables = {
-    input: {
-      name: name,
-      credits: credits
-    }
+  const data = {
+    'first_name': document.getElementById('first_name').value,
+    'last_name' : document.getElementById('last_name').value,
+    'cedula': document.getElementById('cedula').value,
+    'age': document.getElementById('age').value,
   };
+  ajaxRequest.send(JSON.stringify(data));
+}
 
-  try {
-    const response = await fetch('http://localhost:3001/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query: mutation,
-        variables: variables
-      })
-    });
 
-    const result = await response.json();
-    console.log(result);
+/**
+ * Executes the authentication API
+ */
+function login() {
+  const ajaxRequest = new XMLHttpRequest();
+  ajaxRequest.addEventListener("load", function(response){
+    //
+    const responseData = JSON.parse(response.target.responseText)
+    sessionStorage.setItem('token', responseData.session.token);
+    document.location.href = 'add_teacher.html';
+  });
+  ajaxRequest.addEventListener("error", error);
+  ajaxRequest.open("POST", "http://localhost:3001/api/session");
+  ajaxRequest.setRequestHeader("Content-Type", "application/json");
 
-    if (result.errors) {
-      alert('Error creating course: ' + result.errors[0].message);
-    } else {
-      alert('Course created successfully!');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred while creating the course.');
-  }
-
-};
-
+  const data = {
+    'username': document.getElementById('username').value,
+    'password': document.getElementById('password').value
+  };
+  ajaxRequest.send(JSON.stringify(data));
+}

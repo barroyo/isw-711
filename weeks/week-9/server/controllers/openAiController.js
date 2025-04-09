@@ -1,46 +1,32 @@
-const { Configuration, OpenAIApi } = require("openai");
-
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_KEY,
-});
+require('dotenv').config();
+const { OpenAI } = require("openai");
 
 /**
- * Executes prompt
+ * Generate an image using OpenAI
  *
- * @param {*} req
- * @param {*} res
+ * @param {*} args
  */
-const executePrompt = async (req, res) => {
-  const openai = new OpenAIApi(configuration);
-  const response = await openai.listModels();
+const createImage = async (args) => {
+  try {
+    const { prompt } = args;
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_KEY,
+    });
+    const response = await openai.images.generate({
+      prompt,
+      n: 2,
+      size: "1024x1024",
+    });
 
-  res.status(200); // CREATED
-
-  res.json(response);
-
-};
-
-const createImage = async (req, res) => {
-  const { OpenAIApi } = require("openai");
-  const openai = new OpenAIApi(configuration);
-  const response = await openai.createImage({
-    prompt: "Bob Esponja en un cadillac",
-    n: 2,
-    size: "1024x1024",
-  });
-  if(response) {
-    res.status(201); // CREATED
-    res.json(response.data);
-  } else {
-    res.status(422);
-    res.json({
-      message: "There was an error executing the open AI method"
-    })
+    // Returns an array of image URLs
+    return response.data.map(img => img.url);
+  } catch (error) {
+    console.error('Image generation error:', error);
+    return null;
   }
 }
 
 
 module.exports = {
-  executePrompt,
   createImage
 }
