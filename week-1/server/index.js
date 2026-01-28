@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 //middlewares
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors({
   domains: '*',
   methods: '*'
@@ -17,27 +17,45 @@ app.get('/tipocambio', function (req, res) {
   switch(req.query.type) {
     case 'usd':
       response = {
-        "TipoCompraDolares" : "621",
-        "TipoVentaDolares" : "621"
+        "TipoCompraDolares" : "486",
+        "TipoVentaDolares" : "500"
       }
     break;
     case 'eur':
       response = {
-        "TipoCompraEuros" : "731.85",
-        "TipoVentaEuros" : "761.9"
+        "TipoCompraEuros" : "576.85",
+        "TipoVentaEuros" : "598.9"
       }
     break;
     default:
       response = {
         "TipoCompraDolares" : "621",
         "TipoVentaDolares" : "621",
-        "TipoCompraEuros" : "731.85",
-        "TipoVentaEuros" : "761.9"
+        "TipoCompraEuros" : "576.85",
+        "TipoVentaEuros" : "598.9"
+
       }
     break;
   }
   res.json(response);
 });
+app.get('/tipocambio-usd', function (req, res) {
+  let response = {};
+  response = {
+    "TipoCompraDolares" : "486",
+    "TipoVentaDolares" : "500"
+  }
+  res.json(response);
+});
+
+app.get('/tipocambio-eur', function (req, res) {
+  let response = {};
+  response = {
+    "TipoCompraEuros" : "576.85",
+    "TipoVentaEuros" : "598.9"
+  }
+  res.json(response);
+});
 
 //start the app
-app.listen(3001, () => console.log(`BBCR Exchange type service listening on port 3001!`))
+app.listen(3000, () => console.log(`BBCR Exchange type service listening on port 3000!`))
