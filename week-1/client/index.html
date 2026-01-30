@@ -20,6 +20,16 @@
       ajaxRequest.open("GET", `http://localhost:3001/tipocambio?type=${currency}`);
       ajaxRequest.send();
     }
+
+    function getExchangeUsingFetch() {
+      const currency = document.getElementById('type').value;
+      fetch(`http://localhost:3001/tipocambio?type=${currency}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('result').innerHTML = JSON.stringify(data);
+        })
+        .catch(error => console.log('Error:', error));
+    }
   </script>
 </head>
 
@@ -29,7 +39,7 @@
     <option value="eur">Euro</option>
     <option value="usd">US Dollar</option>
   </select>
-  <button onclick="getExchange();">Tipo de Cambio</button>
+  <button onclick="getExchangeUsingFetch();">Tipo de Cambio</button>
   <h3>Results:</h3>
   <div id="result"></div>
 </body>
