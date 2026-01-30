@@ -17,7 +17,7 @@ app.get('/tipocambio', function (req, res) {
   switch(req.query.type) {
     case 'usd':
       response = {
-        "TipoCompraDolares" : "486",
+        "TipoCompraDolares" : "498",
         "TipoVentaDolares" : "500"
       }
     break;
@@ -33,19 +33,19 @@ app.get('/tipocambio', function (req, res) {
         "TipoVentaDolares" : "621",
         "TipoCompraEuros" : "576.85",
         "TipoVentaEuros" : "598.9"
-
       }
     break;
   }
-  res.json(response);
+  res.status(200).json(response);
 });
+
 app.get('/tipocambio-usd', function (req, res) {
   let response = {};
   response = {
-    "TipoCompraDolares" : "486",
+    "TipoCompraDolares" : "498",
     "TipoVentaDolares" : "500"
   }
-  res.json(response);
+  res.status(200).json(response);
 });
 
 app.get('/tipocambio-eur', function (req, res) {
@@ -58,4 +58,4 @@ app.get('/tipocambio-eur', function (req, res) {
 });
 
 //start the app
-app.listen(3000, () => console.log(`BBCR Exchange type service listening on port 3000!`))
+app.listen(3001, () => console.log(`BBCR Exchange type service listening on port 3001!`))
