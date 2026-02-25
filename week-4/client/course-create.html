@@ -68,7 +68,8 @@
                 showJSON({ error: "No se pudo conectar a la API!" });
             });
 
-            ajaxRequest.open("GET", `${API_BASE}/course`);
+            ajaxRequest.open("GET", `${API_BASE}/api/courses`);
+            ajaxRequest.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("authToken")}`);
             ajaxRequest.send();
         }
 
