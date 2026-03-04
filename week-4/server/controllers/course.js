@@ -8,6 +8,7 @@ const Course = require("../models/course");
  */
 const coursePost = async (req, res) => {
   let course = new Course(req.body);
+  course.user = req.user;
   await course.save()
     .then(course => {
       res.status(201); // CREATED
