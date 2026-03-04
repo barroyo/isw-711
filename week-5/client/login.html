@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 900px;
+            margin: 24px auto;
+        }
+
+        input,
+        button {
+            padding: 8px;
+            margin: 6px 0;
+            width: 100%;
+        }
+
+        pre {
+            background: #f6f6f6;
+            padding: 12px;
+            overflow: auto;
+        }
+    </style>
+    <script>
+        const API_BASE = "http://localhost:3001";
+
+        function showJSON(obj) {
+            const el = document.getElementById("result");
+            if (el) {
+                el.textContent = JSON.stringify(obj, null, 2);
+            }
+        }
+
+        async function login(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email")?.value.trim();
+            const password = document.getElementById("password")?.value;
+
+            if (!email || !password) {
+                showJSON({ error: "Email y contraseña son requeridos." });
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/token`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    showJSON({
+                        error: "Error de autenticación",
+                        status: response.status,
+                        ...(data || {}),
+                    });
+                    return;
+                }
+
+                if (data && data.token) {
+                    sessionStorage.setItem("authToken", data.token);
+                    window.location.href = "course-create.html";
+                }
+
+            } catch (err) {
+                showJSON({ error: "No se pudo conectar a la API", detail: String(err) });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("loginForm");
+            if (form) {
+                form.addEventListener("submit", login);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="tu@email"
+            autocomplete="username"
+            required />
+
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="********"
+            autocomplete="current-password"
+            required />
+
+        <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <h3>Resultado:</h3>
+    <pre id="result"></pre>
+
+</body>
+
+</html>
