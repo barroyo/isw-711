@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumir API</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 900px;
+            margin: 24px auto;
+        }
+
+        input,
+        button,
+        select {
+            padding: 8px;
+            margin: 6px 0;
+            width: 100%;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        pre {
+            background: #f6f6f6;
+            padding: 12px;
+            overflow: auto;
+        }
+    </style>
+    <script>
+
+        const API_BASE = "http://localhost:3001";
+        const GRAPHQL_URL = `${API_BASE}/graphql`;
+
+        function showJSON(obj) {
+            document.getElementById("result").textContent = JSON.stringify(obj, null, 2);
+        }
+        function getToken() {
+            return sessionStorage.getItem("authToken") || "";
+        }
+
+        async function gqlRequest({ query, variables }) {
+            const token = getToken();
+            const response = await fetch(GRAPHQL_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify({ query, variables }),
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(payload?.errors?.[0]?.message || `HTTP ${response.status}`);
+            }
+            if (payload?.errors?.length) {
+                throw new Error(payload.errors[0].message || "GraphQL error");
+            }
+            return payload.data;
+        }
+
+        async function loadTeachers() {
+            const data = await gqlRequest({
+                query: `
+                  query {
+                    teachers { id first_name last_name email age }
+                  }
+                `,
+                variables: {},
+            });
+            const teachers = data?.teachers || [];
+
+            let optionsHtml = `<option value=""> -- Seleccione un profesor -- </option>`;
+            teachers.forEach(t => {
+                optionsHtml += `<option value="${t.id}">${t.first_name} ${t.last_name}</option>`;
+            });
+            document.getElementById("teacherSelect").innerHTML = optionsHtml;
+            return teachers;
+        }
+
+        async function loadCourses() {
+            const data = await gqlRequest({
+                query: `
+                  query {
+                    courses { id name credits teacher { id first_name last_name } }
+                  }
+                `,
+                variables: {},
+            });
+            const courses = data?.courses || [];
+
+            let optionsHtml = `<option value=""> -- Seleccione un curso -- </option>`;
+            courses.forEach(c => {
+                optionsHtml += `<option value="${c.id}">${c.name} (${c.credits} créditos)</option>`;
+            });
+            document.getElementById("coursesSelect").innerHTML = optionsHtml;
+            showJSON(courses);
+            return courses;
+        }
+
+        async function loadCourseById(id) {
+            if (!id) return;
+            const data = await gqlRequest({
+                query: `
+                  query Course($id: ID!) {
+                    course(id: $id) { id name credits teacher { id first_name last_name } }
+                  }
+                `,
+                variables: { id },
+            });
+            const course = data?.course;
+            if (!course) return;
+
+            document.getElementById("courseId").value = course.id;
+            document.getElementById("name").value = course.name ?? "";
+            document.getElementById("credits").value = course.credits ?? "";
+            document.getElementById("teacherSelect").value = course.teacher?.id ?? "";
+
+            showJSON(course);
+        }
+
+        async function createTeacher() {
+            const first_name = document.getElementById("t_first_name").value.trim();
+            const last_name = document.getElementById("t_last_name").value.trim();
+            const age = Number(document.getElementById("t_age").value);
+            const email = document.getElementById("t_email").value.trim();
+
+            if (!first_name || !last_name || !email || Number.isNaN(age)) {
+                showJSON({ error: "Completa first_name, last_name, age y email del profesor." });
+                return;
+            }
+
+            const data = await gqlRequest({
+                query: `
+                  mutation CreateTeacher($input: CreateTeacherInput!) {
+                    createTeacher(input: $input) { id first_name last_name email age }
+                  }
+                `,
+                variables: { input: { first_name, last_name, age, email } },
+            });
+            showJSON(data?.createTeacher);
+            await loadTeachers();
+        }
+
+        async function createCourse() {
+            const name = document.getElementById("name").value.trim();
+            const credits = Number(document.getElementById("credits").value);
+            const teacherId = document.getElementById("teacherSelect").value;
+
+            if (!name || Number.isNaN(credits) || !teacherId) {
+                showJSON({ error: "Debes poner name, credits (número) y seleccionar un profesor." });
+                return;
+            }
+
+            const data = await gqlRequest({
+                query: `
+                  mutation CreateCourse($input: CreateCourseInput!) {
+                    createCourse(input: $input) { id name credits teacher { id first_name last_name } }
+                  }
+                `,
+                variables: { input: { name, credits, teacherId } },
+            });
+
+            showJSON({ created: data?.createCourse });
+            await loadCourses();
+        }
+
+        async function updateCourse() {
+            const id = document.getElementById("courseId").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const creditsRaw = document.getElementById("credits").value;
+            const credits = creditsRaw === "" ? null : Number(creditsRaw);
+            const teacherId = document.getElementById("teacherSelect").value;
+
+            if (!id) {
+                showJSON({ error: "Primero selecciona un curso (necesito el id)." });
+                return;
+            }
+
+            const input = {};
+            if (name) input.name = name;
+            if (credits !== null && !Number.isNaN(credits)) input.credits = credits;
+            if (teacherId) input.teacherId = teacherId;
+
+            const data = await gqlRequest({
+                query: `
+                  mutation UpdateCourse($id: ID!, $input: UpdateCourseInput!) {
+                    updateCourse(id: $id, input: $input) { id name credits teacher { id first_name last_name } }
+                  }
+                `,
+                variables: { id, input },
+            });
+            showJSON(data?.updateCourse);
+            await loadCourses();
+        }
+
+        async function deleteCourse() {
+            const id = document.getElementById("courseId").value.trim();
+            if (!id) {
+                showJSON({ error: "Primero selecciona un curso (necesito el id)." });
+                return;
+            }
+
+            const data = await gqlRequest({
+                query: `
+                  mutation DeleteCourse($id: ID!) {
+                    deleteCourse(id: $id)
+                  }
+                `,
+                variables: { id },
+            });
+            showJSON({ deleted: data?.deleteCourse, message: "Eliminado" });
+            document.getElementById("courseId").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("credits").value = "";
+            document.getElementById("teacherSelect").value = "";
+            await loadCourses();
+        }
+
+        async function bootstrap() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                await loadTeachers();
+                await loadCourses();
+                document.getElementById("coursesSelect").addEventListener("change", (e) => {
+                    loadCourseById(e.target.value);
+                });
+            } catch (err) {
+                showJSON({ error: String(err) });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", bootstrap);
+
+    </script>
+</head>
+
+<body>
+    <h1>Courses API (UTN)</h1>
+
+    <button onclick="loadCourses()">🔄 Recargar lista</button>
+
+    <h3>Crear profesor</h3>
+    <div class="row">
+        <div>
+            <label>Nombre</label>
+            <input id="t_first_name" placeholder="Ej: Ada" />
+        </div>
+        <div>
+            <label>Apellido</label>
+            <input id="t_last_name" placeholder="Ej: Lovelace" />
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <label>Edad</label>
+            <input id="t_age" type="number" placeholder="Ej: 35" />
+        </div>
+        <div>
+            <label>Email</label>
+            <input id="t_email" type="email" placeholder="ej: ada@utn.edu" />
+        </div>
+    </div>
+    <button onclick="createTeacher()">➕ Crear profesor</button>
+
+    <h3>Seleccionar curso</h3>
+    <select id="coursesSelect"></select>
+
+    <h3>Formulario</h3>
+    <input id="courseId" placeholder="Course ID (se llena solo al seleccionar)" readonly />
+
+    <div class="row">
+        <div>
+            <label>Nombre</label>
+            <input id="name" placeholder="Ej: Programación 1" />
+        </div>
+        <div>
+            <label>Créditos</label>
+            <input id="credits" type="number" placeholder="Ej: 4" />
+        </div>
+    </div>
+
+    <label>Profesor</label>
+    <select id="teacherSelect"></select>
+
+    <div class="row">
+        <button onclick="createCourse()">➕ Crear</button>
+        <button onclick="updateCourse()">✏️ Actualizar</button>
+    </div>
+
+    <button onclick="deleteCourse()">🗑️ Eliminar</button>
+
+    <h3>Results:</h3>
+    <pre id="result"></pre>
+
+</body>
+
+</html>
